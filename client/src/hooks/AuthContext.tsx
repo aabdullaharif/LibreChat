@@ -45,7 +45,7 @@ const AuthContextProvider = ({
 
   const setUserContext = useCallback(
     (userContext: TUserContext) => {
-      const { token, isAuthenticated, user, redirect } = userContext;
+      const { token, isAuthenticated, user, redirect, keyClockRedirectURI } = userContext;
       if (user) {
         setUser(user);
       }
@@ -55,6 +55,9 @@ const AuthContextProvider = ({
       setIsAuthenticated(isAuthenticated);
       if (redirect) {
         navigate(redirect, { replace: true });
+      }
+      if (keyClockRedirectURI) {
+        window.location.replace(keyClockRedirectURI);
       }
     },
     [navigate, setUser],
@@ -68,7 +71,7 @@ const AuthContextProvider = ({
         token: undefined,
         isAuthenticated: false,
         user: undefined,
-        redirect: '/login',
+        keyClockRedirectURI: 'http://localhost:8080/realms/librechat/protocol/openid-connect/logout?post_logout_redirect_uri=http://localhost:3090/login&client_id=librechat',
       });
     },
     onError: (error) => {
@@ -77,7 +80,7 @@ const AuthContextProvider = ({
         token: undefined,
         isAuthenticated: false,
         user: undefined,
-        redirect: '/login',
+        redirect: '/oauth/openid',
       });
     },
   });
@@ -96,7 +99,7 @@ const AuthContextProvider = ({
       onError: (error: TResError | unknown) => {
         const resError = error as TResError;
         doSetError(resError.message);
-        navigate('/login', { replace: true });
+        navigate('/oauth/openid', { replace: true });
       },
     });
   };
@@ -116,7 +119,7 @@ const AuthContextProvider = ({
           if (authConfig?.test) {
             return;
           }
-          navigate('/login');
+          navigate('/oauth/openid');
         }
       },
       onError: (error) => {
@@ -124,7 +127,7 @@ const AuthContextProvider = ({
         if (authConfig?.test) {
           return;
         }
-        navigate('/login');
+        navigate('/oauth/openid');
       },
     });
   }, []);
@@ -134,7 +137,7 @@ const AuthContextProvider = ({
       setUser(userQuery.data);
     } else if (userQuery.isError) {
       doSetError((userQuery.error as Error).message);
-      navigate('/login', { replace: true });
+      navigate('/oauth/openid', { replace: true });
     }
     if (error && isAuthenticated) {
       doSetError(undefined);

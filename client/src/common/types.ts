@@ -127,10 +127,10 @@ export interface NavProps {
 
 export interface DataColumnMeta {
   meta:
-    | {
-        size: number | string;
-      }
-    | undefined;
+  | {
+    size: number | string;
+  }
+  | undefined;
 }
 
 export enum Panel {
@@ -404,6 +404,7 @@ export type TUserContext = {
   token: string | undefined;
   isAuthenticated: boolean;
   redirect?: string;
+  keyClockRedirectURI?: string;
 };
 
 export type TAuthConfig = {
