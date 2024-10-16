@@ -80,7 +80,7 @@ const AuthContextProvider = ({
         token: undefined,
         isAuthenticated: false,
         user: undefined,
-        redirect: '/oauth/openid',
+        redirect: '/login',
       });
     },
   });
@@ -99,7 +99,7 @@ const AuthContextProvider = ({
       onError: (error: TResError | unknown) => {
         const resError = error as TResError;
         doSetError(resError.message);
-        navigate('/oauth/openid', { replace: true });
+        navigate('/login', { replace: true });
       },
     });
   };
@@ -119,7 +119,7 @@ const AuthContextProvider = ({
           if (authConfig?.test) {
             return;
           }
-          navigate('/oauth/openid');
+          navigate('/login');
         }
       },
       onError: (error) => {
@@ -127,7 +127,7 @@ const AuthContextProvider = ({
         if (authConfig?.test) {
           return;
         }
-        navigate('/oauth/openid');
+        navigate('/login');
       },
     });
   }, []);
@@ -137,7 +137,7 @@ const AuthContextProvider = ({
       setUser(userQuery.data);
     } else if (userQuery.isError) {
       doSetError((userQuery.error as Error).message);
-      navigate('/oauth/openid', { replace: true });
+      navigate('/login', { replace: true });
     }
     if (error && isAuthenticated) {
       doSetError(undefined);
